@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ачивки - Skypro 1 Line</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #8B5FBF;
+            --primary-dark: #6A4A9C;
+            --primary-light: #9D7BC9;
+            --secondary: #00D4AA;
+            --accent: #FF6B9D;
+            --white: #FFFFFF;
+            --light: #F8F7FC;
+            --dark: #2D2B55;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 100vh;
+            color: var(--white);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--white);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: -75px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            border-radius: 2px;
+        }
+        
+        .main-title {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        /* Категории ачивок */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .category-card {
+            background: rgba(255,255,255,0.08);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .category-card:hover::before {
+            left: 100%;
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .category-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .category-title {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .category-count {
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: inline-block;
+        }
+
+        /* Галерея ачивок */
+        .achievements-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .achievement-card {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .achievement-card.rare::before {
+            background: linear-gradient(90deg, #FFD700, #FF6B00);
+        }
+
+        .achievement-card.epic::before {
+            background: linear-gradient(90deg, #9D50BB, #6A3093);
+        }
+
+        .achievement-card.legendary::before {
+            background: linear-gradient(90deg, #FF0000, #FF8C00, #FFD700);
+            animation: legendaryGlow 2s infinite alternate;
+        }
+
+        @keyframes legendaryGlow {
+            from { opacity: 0.7; }
+            to { opacity: 1; }
+        }
+
+        .achievement-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .achievement-badge {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            box-shadow: 0 8px 25px rgba(0,212,170,0.3);
+            position: relative;
+        }
+
+        .achievement-badge.rare {
+            background: linear-gradient(135deg, #FFD700, #FF8C00);
+            box-shadow: 0 8px 25px rgba(255,215,0,0.3);
+        }
+
+        .achievement-badge.epic {
+            background: linear-gradient(135deg, #9D50BB, #6A3093);
+            box-shadow: 0 8px 25px rgba(157,80,187,0.3);
+        }
+
+        .achievement-badge.legendary {
+            background: linear-gradient(135deg, #FF0000, #FF8C00, #FFD700);
+            box-shadow: 0 8px 25px rgba(255,0,0,0.3);
+            animation: badgePulse 2s infinite;
+        }
+
+        @keyframes badgePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .achievement-name {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .achievement-description {
+            opacity: 0.8;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .achievement-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        .achievement-points {
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .achievement-rarity {
+            font-size: 0.8em;
+            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Фильтры */
+        .filters {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            border-color: transparent;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 2.5em;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .achievements-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            На главную
+        </a>
+
+        <div class="header">
+            <h1 class="main-title">Галерея Ачивок</h1>
+            <p class="subtitle">Откройте все достижения и станьте легендой Skypro!</p>
+        </div>
+
+        <!-- Категории -->
+        <div class="categories-grid">
+            <div class="category-card" onclick="filterAchievements('all')">
+                <span class="category-icon">🏆</span>
+                <div class="category-title">Все ачивки</div>
+                <div class="category-count" id="totalCount">25</div>
+            </div>
+            <div class="category-card" onclick="filterAchievements('productivity')">
+                <span class="category-icon">⚡</span>
+                <div class="category-title">Продуктивность</div>
+                <div class="category-count" id="productivityCount">8</div>
+            </div>
+            <div class="category-card" onclick="filterAchievements('quality')">
+                <span class="category-icon">⭐</span>
+                <div class="category-title">Качество</div>
+                <div class="category-count" id="qualityCount">7</div>
+            </div>
+            <div class="category-card" onclick="filterAchievements('teamwork')">
+                <span class="category-icon">👥</span>
+                <div class="category-title">Команда</div>
+                <div class="category-count" id="teamworkCount">6</div>
+            </div>
+        </div>
+
+        <!-- Фильтры -->
+        <div class="filters">
+            <button class="filter-btn active" onclick="filterByRarity('all')">Все</button>
+            <button class="filter-btn" onclick="filterByRarity('common')">Обычные</button>
+            <button class="filter-btn" onclick="filterByRarity('rare')">Редкие</button>
+            <button class="filter-btn" onclick="filterByRarity('epic')">Эпические</button>
+            <button class="filter-btn" onclick="filterByRarity('legendary')">Легендарные</button>
+        </div>
+
+        <!-- Галерея -->
+        <div class="achievements-gallery" id="achievementsGallery">
+            <!-- Ачивки будут загружены через JS -->
+        </div>
+    </div>
+
+    <script>
+        const allAchievements = [
+            {
+                id: 1,
+                name: "Мастер общения",
+                description: "Провел 1000 успешных консультаций с клиентами",
+                points: 100,
+                category: "productivity",
+                icon: "💬",
+                rarity: "common"
+            },
+            {
+                id: 2,
+                name: "Скоростник", 
+                description: "Среднее время ответа менее 30 секунд в течение месяца",
+                points: 150,
+                category: "productivity",
+                icon: "⚡",
+                rarity: "rare"
+            },
+            {
+                id: 3,
+                name: "Эксперт продукта",
+                description: "Сдал экзамен по всем продуктам компании на 95%+",
+                points: 200,
+                category: "quality", 
+                icon: "🎓",
+                rarity: "epic"
+            },
+            {
+                id: 4,
+                name: "Ночной охотник",
+                description: "Выполнил 50+ успешных консультаций в ночную смену",
+                points: 180,
+                category: "productivity",
+                icon: "🌙",
+                rarity: "rare"
+            },
+            {
+                id: 5,
+                name: "Клиентоориентированность",
+                description: "Получил 95%+ положительных отзывов от клиентов",
+                points: 250,
+                category: "quality",
+                icon: "❤️",
+                rarity: "epic"
+            },
+            {
+                id: 6,
+                name: "Командный игрок",
+                description: "Помог 20+ коллегам решить сложные задачи",
+                points: 180,
+                category: "teamwork",
+                icon: "🤝",
+                rarity: "common"
+            },
+            {
+                id: 7,
+                name: "Решение проблем",
+                description: "Успешно решил 500+ сложных кейсов",
+                points: 220,
+                category: "quality",
+                icon: "🔧",
+                rarity: "rare"
+            },
+            {
+                id: 8,
+                name: "Наставник",
+                description: "Обучил 10+ новых сотрудников",
+                points: 270,
+                category: "teamwork",
+                icon: "👨‍🏫",
+                rarity: "epic"
+            },
+            {
+                id: 9,
+                name: "Легенда поддержки",
+                description: "Проработал в компании более 3 лет с отличными показателями",
+                points: 500,
+                category: "quality",
+                icon: "🌟",
+                rarity: "legendary"
+            },
+            {
+                id: 10,
+                name: "Креативщик",
+                description: "Предложил 50+ улучшений процессов работы",
+                points: 250,
+                category: "teamwork",
+                icon: "💡",
+                rarity: "rare"
+            }
+        ];
+
+        let currentCategory = 'all';
+        let currentRarity = 'all';
+
+        function initializeAchievementsPage() {
+            updateCategoryCounts();
+            displayAchievements(allAchievements);
+            setActiveFilter('all');
+        }
+
+        function updateCategoryCounts() {
+            document.getElementById('totalCount').textContent = allAchievements.length;
+            document.getElementById('productivityCount').textContent = allAchievements.filter(a => a.category === 'productivity').length;
+            document.getElementById('qualityCount').textContent = allAchievements.filter(a => a.category === 'quality').length;
+            document.getElementById('teamworkCount').textContent = allAchievements.filter(a => a.category === 'teamwork').length;
+        }
+
+        function filterAchievements(category) {
+            currentCategory = category;
+            applyFilters();
+            setActiveCategory(category);
+        }
+
+        function filterByRarity(rarity) {
+            currentRarity = rarity;
+            applyFilters();
+            setActiveFilter(rarity);
+        }
+
+        function applyFilters() {
+            let filtered = allAchievements;
+            
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(a => a.category === currentCategory);
+            }
+            
+            if (currentRarity !== 'all') {
+                filtered = filtered.filter(a => a.rarity === currentRarity);
+            }
+            
+            displayAchievements(filtered);
+        }
+
+        function setActiveCategory(category) {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.style.background = 'rgba(255,255,255,0.08)';
+            });
+            
+            if (category === 'all') {
+                document.querySelector('.category-card').style.background = 'rgba(0,212,170,0.15)';
+            } else {
+                const activeCard = Array.from(document.querySelectorAll('.category-card'))
+                    .find(card => card.querySelector('.category-title').textContent.toLowerCase().includes(category));
+                if (activeCard) {
+                    activeCard.style.background = 'rgba(0,212,170,0.15)';
+                }
+            }
+        }
+
+        function setActiveFilter(rarity) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            const activeBtn = Array.from(document.querySelectorAll('.filter-btn'))
+                .find(btn => btn.textContent.toLowerCase().includes(rarity));
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+            }
+        }
+
+        function displayAchievements(achievements) {
+            const gallery = document.getElementById('achievementsGallery');
+            
+            if (achievements.length === 0) {
+                gallery.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px; opacity: 0.7;">
+                        <div style="font-size: 4em; margin-bottom: 20px;">🔍</div>
+                        <h3>Ачивки не найдены</h3>
+                        <p>Попробуйте изменить фильтры</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            gallery.innerHTML = achievements.map(achievement => `
+                <div class="achievement-card ${achievement.rarity}">
+                    <div class="achievement-badge ${achievement.rarity}">
+                        ${achievement.icon}
+                    </div>
+                    <div class="achievement-name">${achievement.name}</div>
+                    <div class="achievement-description">${achievement.description}</div>
+                    <div class="achievement-meta">
+                        <div class="achievement-points">+${achievement.points}</div>
+                        <div class="achievement-rarity">${getRarityText(achievement.rarity)}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function getRarityText(rarity) {
+            const rarityTexts = {
+                'common': 'Обычная',
+                'rare': 'Редкая', 
+                'epic': 'Эпическая',
+                'legendary': 'Легендарная'
+            };
+            return rarityTexts[rarity] || rarity;
+        }
+
+        document.addEventListener('DOMContentLoaded', initializeAchievementsPage);
+    </script>
+</body>
+</html>

@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет - Skypro 1 Line</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #8B5FBF;
+            --primary-dark: #6A4A9C;
+            --primary-light: #9D7BC9;
+            --secondary: #00D4AA;
+            --accent: #FF6B9D;
+            --white: #FFFFFF;
+            --light: #F8F7FC;
+            --dark: #2D2B55;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 100vh;
+            color: var(--white);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--white);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: -75px;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(3) {
+            width: 100px;
+            height: 100px;
+            top: 50%;
+            right: 10%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: rgba(255,255,255,0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+        
+        .back-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 12px 25px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(0,212,170,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,212,170,0.4);
+        }
+        
+        .operator-info {
+            text-align: center;
+            flex-grow: 1;
+        }
+        
+        .operator-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.8em;
+            color: var(--dark);
+            box-shadow: 0 12px 35px rgba(0,212,170,0.4);
+            border: 3px solid rgba(255,255,255,0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .operator-avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+        
+        .operator-name {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .operator-points {
+            font-size: 1.4em;
+            color: var(--secondary);
+            font-weight: bold;
+            background: rgba(255,255,255,0.1);
+            padding: 10px 25px;
+            border-radius: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .points-breakdown {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .point-item {
+            background: rgba(255,255,255,0.08);
+            padding: 12px 20px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            text-align: center;
+            min-width: 120px;
+            transition: transform 0.3s ease;
+        }
+
+        .point-item:hover {
+            transform: translateY(-3px);
+            background: rgba(255,255,255,0.12);
+        }
+
+        .point-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--secondary);
+            display: block;
+        }
+
+        .point-label {
+            font-size: 0.85em;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .achievements-section, .shop-section {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievements-section::before, .shop-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+
+        .achievements-section:hover, .shop-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            font-weight: 600;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        .achievements-grid {
+            display: grid;
+            gap: 18px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        
+        .achievements-grid::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .achievements-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        
+        .achievements-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border-radius: 5px;
+        }
+        
+        .achievement-card {
+            background: rgba(255,255,255,0.05);
+            padding: 20px;
+            border-radius: 18px;
+            border-left: 4px solid var(--primary-light);
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .achievement-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .achievement-card:hover::before {
+            left: 100%;
+        }
+        
+        .achievement-card.earned {
+            border-left-color: var(--secondary);
+            background: rgba(0,212,170,0.08);
+            border: 1px solid rgba(0,212,170,0.2);
+        }
+        
+        .achievement-card.not-earned {
+            opacity: 0.7;
+            border-left-color: #7f8fa6;
+            background: rgba(127, 143, 166, 0.08);
+        }
+
+        .achievement-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateX(5px);
+        }
+        
+        .achievement-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+
+        .achievement-name {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 8px;
+            color: var(--white);
+        }
+
+        .achievement-badge {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,212,170,0.3);
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+
+        .not-earned .achievement-badge {
+            background: linear-gradient(135deg, #7f8fa6, #a4b0be);
+        }
+        
+        .achievement-description {
+            font-size: 0.95em;
+            opacity: 0.9;
+            line-height: 1.4;
+            margin-bottom: 12px;
+        }
+        
+        .achievement-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85em;
+        }
+
+        .status-icon {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+        }
+
+        .earned .status-icon {
+            background: var(--secondary);
+            color: var(--dark);
+        }
+
+        .not-earned .status-icon {
+            background: #7f8fa6;
+            color: var(--white);
+        }
+        
+        .shop-items {
+            display: grid;
+            gap: 18px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        
+        .shop-items::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .shop-items::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        
+        .shop-items::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border-radius: 5px;
+        }
+        
+        .shop-item {
+            background: rgba(255,255,255,0.05);
+            padding: 25px;
+            border-radius: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .shop-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .shop-item:hover::before {
+            left: 100%;
+        }
+
+        .shop-item:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateX(5px);
+        }
+        
+        .item-info {
+            flex-grow: 1;
+        }
+
+        .item-info h3 {
+            margin-bottom: 8px;
+            font-size: 1.3em;
+            font-weight: 600;
+        }
+        
+        .item-info p {
+            font-size: 0.95em;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .item-cost {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 1em;
+            box-shadow: 0 4px 15px rgba(0,212,170,0.3);
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .buy-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,212,170,0.3);
+        }
+        
+        .buy-button:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,212,170,0.4);
+        }
+        
+        .buy-button:disabled {
+            background: linear-gradient(135deg, #7f8fa6, #a4b0be);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: 0 4px 15px rgba(127,143,166,0.3);
+        }
+
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header, .achievements-section, .shop-section {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .achievements-section {
+            animation-delay: 0.2s;
+        }
+
+        .shop-section {
+            animation-delay: 0.4s;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 25px;
+                text-align: center;
+            }
+            
+            .operator-name {
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .operator-name {
+                font-size: 1.6em;
+            }
+            
+            .operator-points {
+                font-size: 1.2em;
+            }
+            
+            .points-breakdown {
+                gap: 10px;
+            }
+            
+            .point-item {
+                padding: 10px 15px;
+                min-width: 100px;
+            }
+            
+            .shop-item {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .item-controls {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Дополнительные стили для прогресса */
+        .progress-section {
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .progress-title {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            text-align: center;
+            color: var(--secondary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85em;
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <button class="back-button" onclick="goBack()">
+                <i class="fas fa-arrow-left"></i>
+                Назад
+            </button>
+            <div class="operator-info">
+                <div class="operator-avatar" id="operatorAvatar">?</div>
+                <h1 class="operator-name" id="operatorName">Загрузка...</h1>
+                <div class="operator-points" id="operatorPoints">0 баллов</div>
+                
+                <div class="points-breakdown">
+                    <div class="point-item">
+                        <span class="point-value" id="earnedPoints">0</span>
+                        <span class="point-label">Заработано</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-value" id="availablePoints">0</span>
+                        <span class="point-label">Доступно</span>
+                    </div>
+                    <div class="point-item">
+                        <span class="point-value" id="achievementsCount">0</span>
+                        <span class="point-label">Ачивки</span>
+                    </div>
+                </div>
+            </div>
+            <div style="width: 130px;"></div> <!-- Для балансировки -->
+        </div>
+        
+        <div class="content">
+            <div class="achievements-section">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy" style="color: var(--secondary); margin-right: 10px;"></i>
+                    Мои ачивки
+                </h2>
+                <div class="achievements-grid" id="achievementsGrid">
+                    <!-- Ачивки будут загружены через JS -->
+                </div>
+            </div>
+            
+            <div class="shop-section">
+                <h2 class="section-title">
+                    <i class="fas fa-gift" style="color: var(--accent); margin-right: 10px;"></i>
+                    Магазин баллов
+                </h2>
+                <div class="shop-items" id="shopItems">
+                    <!-- Товары будут загружены через JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Данные магазина
+        const shopItems = [
+            { id: 1, name: "☕ Кофе на выбор", description: "Любой кофе в офисе на выбор", cost: 50 },
+            { id: 2, name: "🍽️ Обед за счет компании", description: "Вкусный обед в столовой", cost: 100 },
+            { id: 3, name: "🎬 Билет в кино", description: "Пригласительный билет в кинотеатр", cost: 200 },
+            { id: 4, name: "👕 Фирменная футболка", description: "Стильный мерч Skypro", cost: 300 },
+            { id: 5, name: "🏖️ Дополнительный выходной", description: "Внеплановый отгул", cost: 500 },
+            { id: 6, name: "💳 Подарочная карта", description: "Карта на 1000 рублей в магазин", cost: 1000 }
+        ];
+
+        let currentOperator = null;
+
+        // Загрузка данных оператора
+        function loadOperatorData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const operatorId = parseInt(urlParams.get('id'));
+            
+            const operators = JSON.parse(localStorage.getItem('operators'));
+            currentOperator = operators.find(op => op.id === operatorId);
+            
+            if (currentOperator) {
+                document.getElementById('operatorAvatar').textContent = 
+                    currentOperator.name.split(' ').map(n => n[0]).join('');
+                document.getElementById('operatorName').textContent = currentOperator.name;
+                document.getElementById('operatorPoints').textContent = `${currentOperator.points} баллов`;
+                
+                // Обновляем статистику
+                const earnedPoints = currentOperator.achievements
+                    .filter(a => a.earned)
+                    .reduce((sum, a) => sum + a.points, 0);
+                const achievementsCount = currentOperator.achievements.filter(a => a.earned).length;
+                
+                document.getElementById('earnedPoints').textContent = earnedPoints;
+                document.getElementById('availablePoints').textContent = currentOperator.points;
+                document.getElementById('achievementsCount').textContent = achievementsCount;
+                
+                displayAchievements();
+                displayShopItems();
+            } else {
+                // Если оператор не найден, перенаправляем на главную
+                window.location.href = 'index.html';
+            }
+        }
+
+        // Отображение ачивок
+        function displayAchievements() {
+            const achievementsGrid = document.getElementById('achievementsGrid');
+            achievementsGrid.innerHTML = '';
+            
+            currentOperator.achievements.forEach(achievement => {
+                const achievementCard = document.createElement('div');
+                achievementCard.className = `achievement-card ${achievement.earned ? 'earned' : 'not-earned'}`;
+                achievementCard.innerHTML = `
+                    <div class="achievement-header">
+                        <div>
+                            <div class="achievement-name">${achievement.name}</div>
+                            <div class="achievement-description">${achievement.description}</div>
+                        </div>
+                        <div class="achievement-badge">+${achievement.points}</div>
+                    </div>
+                    <div class="achievement-status">
+                        <div class="status-icon">
+                            <i class="fas ${achievement.earned ? 'fa-check' : 'fa-clock'}"></i>
+                        </div>
+                        <span>${achievement.earned ? 'Получено' : 'Не получено'}</span>
+                    </div>
+                `;
+                achievementsGrid.appendChild(achievementCard);
+            });
+        }
+
+        // Отображение товаров в магазине
+        function displayShopItems() {
+            const shopItemsContainer = document.getElementById('shopItems');
+            shopItemsContainer.innerHTML = '';
+            
+            shopItems.forEach(item => {
+                const shopItem = document.createElement('div');
+                shopItem.className = 'shop-item';
+                shopItem.innerHTML = `
+                    <div class="item-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.description}</p>
+                    </div>
+                    <div class="item-controls">
+                        <span class="item-cost">${item.cost} баллов</span>
+                        <button class="buy-button" onclick="buyItem(${item.id})" 
+                                ${currentOperator.points < item.cost ? 'disabled' : ''}>
+                            ${currentOperator.points < item.cost ? 'Недостаточно' : 'Купить'}
+                        </button>
+                    </div>
+                `;
+                shopItemsContainer.appendChild(shopItem);
+            });
+        }
+
+        // Покупка товара
+        function buyItem(itemId) {
+            const item = shopItems.find(i => i.id === itemId);
+            
+            if (currentOperator.points >= item.cost) {
+                if (confirm(`Вы уверены, что хотите купить "${item.name}" за ${item.cost} баллов?`)) {
+                    // Обновляем баллы
+                    currentOperator.points -= item.cost;
+                    
+                    // Сохраняем изменения
+                    const operators = JSON.parse(localStorage.getItem('operators'));
+                    const operatorIndex = operators.findIndex(op => op.id === currentOperator.id);
+                    operators[operatorIndex] = currentOperator;
+                    localStorage.setItem('operators', JSON.stringify(operators));
+                    
+                    // Обновляем интерфейс
+                    document.getElementById('operatorPoints').textContent = `${currentOperator.points} баллов`;
+                    document.getElementById('availablePoints').textContent = currentOperator.points;
+                    displayShopItems();
+                    
+                    alert(`🎉 Поздравляем! Вы приобрели "${item.name}"!`);
+                }
+            } else {
+                alert('Недостаточно баллов для покупки!');
+            }
+        }
+
+        // Назад к главной
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', loadOperatorData);
+    </script>
+</body>
+</html>

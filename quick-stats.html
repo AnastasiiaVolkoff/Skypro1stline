@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Быстрое обновление - Skypro 1 Line</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #8B5FBF;
+            --primary-dark: #6A4A9C;
+            --primary-light: #9D7BC9;
+            --secondary: #00D4AA;
+            --accent: #FF6B9D;
+            --white: #FFFFFF;
+            --light: #F8F7FC;
+            --dark: #2D2B55;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 100vh;
+            color: var(--white);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--white);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 200px;
+            height: 200px;
+            top: 10%;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 150px;
+            height: 150px;
+            bottom: 20%;
+            left: -75px;
+            animation-delay: -5s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            border-radius: 2px;
+        }
+        
+        .main-title {
+            font-size: 3em;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+
+        .back-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-bottom: 20px;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .control-panel {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 20px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .week-selector {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .week-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: white;
+            font-size: 1em;
+        }
+
+        .week-input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .action-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .action-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,212,170,0.3);
+        }
+
+        .stats-table-container {
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .stats-table th {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            position: sticky;
+            top: 0;
+        }
+
+        .stats-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .stats-table tr:hover {
+            background: rgba(255,255,255,0.05);
+        }
+
+        .number-input {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            padding: 8px 10px;
+            color: white;
+            width: 80px;
+            text-align: center;
+        }
+
+        .number-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+
+        .save-section {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .save-button {
+            background: linear-gradient(135deg, var(--accent), #ff8fab);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .save-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255,107,157,0.4);
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--secondary);
+            color: var(--dark);
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .main-title {
+                font-size: 2em;
+            }
+            
+            .stats-table {
+                font-size: 0.9em;
+            }
+            
+            .number-input {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <div class="container">
+        <a href="index.html" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+            На главную
+        </a>
+
+        <div class="header">
+            <h1 class="main-title">Быстрое обновление</h1>
+            <p class="subtitle">Внесите данные за неделю одним кликом</p>
+        </div>
+
+        <div class="control-panel">
+            <div class="week-selector">
+                <label><strong>Выберите неделю:</strong></label>
+                <input type="week" id="weekSelector" class="week-input">
+                <button onclick="loadWeekData()" class="action-button">
+                    <i class="fas fa-search"></i>
+                    Загрузить данные
+                </button>
+                <button onclick="createNewWeek()" class="action-button">
+                    <i class="fas fa-plus"></i>
+                    Новая неделя
+                </button>
+            </div>
+        </div>
+
+        <div class="stats-table-container">
+            <table class="stats-table">
+                <thead>
+                    <tr>
+                        <th>Оператор</th>
+                        <th style="text-align: center;">📞 Назначения</th>
+                        <th style="text-align: center;">💰 Продажи</th>
+                        <th style="text-align: center;">⭐ Оценки (1-5)</th>
+                        <th style="text-align: center;">✅ Решенные кейсы</th>
+                    </tr>
+                </thead>
+                <tbody id="statsTableBody">
+                    <!-- Данные будут загружены через JS -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="save-section">
+            <button onclick="saveAllData()" class="save-button">
+                <i class="fas fa-save"></i>
+                СОХРАНИТЬ ВСЕ ДАННЫЕ
+            </button>
+        </div>
+    </div>
+
+    <div id="notification" class="notification">
+        Данные успешно сохранены!
+    </div>
+
+    <script>
+        // Получаем текущую неделю в формате YYYY-WW
+        function getCurrentWeek() {
+            const now = new Date();
+            const startOfYear = new Date(now.getFullYear(), 0, 1);
+            const days = Math.floor((now - startOfYear) / (24 * 60 * 60 * 1000));
+            const weekNumber = Math.ceil((days + 1) / 7);
+            return `${now.getFullYear()}-W${weekNumber.toString().padStart(2, '0')}`;
+        }
+
+        // Загружаем операторов и данные
+        function loadOperatorsAndData() {
+            const operators = JSON.parse(localStorage.getItem('operators')) || [];
+            const weeklyStats = JSON.parse(localStorage.getItem('weeklyStats')) || {};
+            
+            // Устанавливаем текущую неделю по умолчанию
+            document.getElementById('weekSelector').value = getCurrentWeek();
+            
+            // Заполняем таблицу
+            populateStatsTable(operators, weeklyStats);
+        }
+
+        // Заполняем таблицу данными
+        function populateStatsTable(operators, weeklyStats) {
+            const tbody = document.getElementById('statsTableBody');
+            const currentWeek = document.getElementById('weekSelector').value;
+            const weekData = weeklyStats[currentWeek] || {};
+
+            tbody.innerHTML = operators.map(operator => {
+                const operatorData = weekData[operator.id] || {};
+                return `
+                    <tr>
+                        <td>
+                            <strong>${operator.name}</strong>
+                            <div style="font-size: 0.8em; opacity: 0.7; margin-top: 2px;">
+                                ${operator.points} баллов
+                            </div>
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" 
+                                   id="appointments_${operator.id}" 
+                                   class="number-input" 
+                                   value="${operatorData.appointments || ''}" 
+                                   placeholder="0"
+                                   min="0">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" 
+                                   id="sales_${operator.id}" 
+                                   class="number-input" 
+                                   value="${operatorData.sales || ''}" 
+                                   placeholder="0"
+                                   min="0">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" 
+                                   id="rating_${operator.id}" 
+                                   class="number-input" 
+                                   value="${operatorData.rating || ''}" 
+                                   placeholder="0"
+                                   min="1" max="5" step="0.1">
+                        </td>
+                        <td style="text-align: center;">
+                            <input type="number" 
+                                   id="solved_${operator.id}" 
+                                   class="number-input" 
+                                   value="${operatorData.solved || ''}" 
+                                   placeholder="0"
+                                   min="0">
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Загружаем данные выбранной недели
+        function loadWeekData() {
+            const operators = JSON.parse(localStorage.getItem('operators')) || [];
+            const weeklyStats = JSON.parse(localStorage.getItem('weeklyStats')) || {};
+            populateStatsTable(operators, weeklyStats);
+        }
+
+        // Создаем новую неделю
+        function createNewWeek() {
+            const weekInput = document.getElementById('weekSelector');
+            if (!weekInput.value) {
+                alert('Выберите неделю!');
+                return;
+            }
+            
+            // Просто очищаем поля для новой недели
+            const operators = JSON.parse(localStorage.getItem('operators')) || [];
+            operators.forEach(operator => {
+                document.getElementById(`appointments_${operator.id}`).value = '';
+                document.getElementById(`sales_${operator.id}`).value = '';
+                document.getElementById(`rating_${operator.id}`).value = '';
+                document.getElementById(`solved_${operator.id}`).value = '';
+            });
+            
+            showNotification('Готово для ввода данных за новую неделю!');
+        }
+
+        // Сохраняем все данные
+        function saveAllData() {
+            const week = document.getElementById('weekSelector').value;
+            if (!week) {
+                alert('Выберите неделю!');
+                return;
+            }
+
+            const operators = JSON.parse(localStorage.getItem('operators')) || [];
+            const weeklyStats = JSON.parse(localStorage.getItem('weeklyStats')) || {};
+            
+            weeklyStats[week] = weeklyStats[week] || {};
+            
+            operators.forEach(operator => {
+                weeklyStats[week][operator.id] = {
+                    appointments: parseInt(document.getElementById(`appointments_${operator.id}`).value) || 0,
+                    sales: parseInt(document.getElementById(`sales_${operator.id}`).value) || 0,
+                    rating: parseFloat(document.getElementById(`rating_${operator.id}`).value) || 0,
+                    solved: parseInt(document.getElementById(`solved_${operator.id}`).value) || 0,
+                    name: operator.name,
+                    timestamp: new Date().toISOString()
+                };
+            });
+            
+            localStorage.setItem('weeklyStats', JSON.stringify(weeklyStats));
+            showNotification('Данные успешно сохранены!');
+            
+            // Обновляем баллы операторов на основе новых данных
+            updateOperatorPoints(week, operators, weeklyStats[week]);
+        }
+
+        // Обновляем баллы операторов
+        function updateOperatorPoints(week, operators, weekData) {
+            operators.forEach(operator => {
+                const data = weekData[operator.id];
+                if (data) {
+                    // Простая формула для начисления баллов
+                    let newPoints = 
+                        (data.appointments * 2) + 
+                        (data.sales * 10) + 
+                        (data.rating * 20) + 
+                        (data.solved * 5);
+                    
+                    // Можно добавить логику для обновления баллов
+                    // operator.points += newPoints;
+                }
+            });
+            
+            localStorage.setItem('operators', JSON.stringify(operators));
+        }
+
+        // Показываем уведомление
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Загружаем данные при старте
+        document.addEventListener('DOMContentLoaded', loadOperatorsAndData);
+    </script>
+</body>
+</html>

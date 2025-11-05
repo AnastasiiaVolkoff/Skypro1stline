@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skypro 1 Line - Главная</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #8B5FBF;
+            --primary-dark: #6A4A9C;
+            --primary-light: #9D7BC9;
+            --secondary: #00D4AA;
+            --accent: #FF6B9D;
+            --white: #FFFFFF;
+            --light: #F8F7FC;
+            --dark: #2D2B55;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--primary-light) 100%);
+            min-height: 100vh;
+            color: var(--white);
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Анимированный фон */
+        .background-shapes {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            opacity: 0.1;
+            border-radius: 50%;
+            background: var(--white);
+            animation: float 20s infinite linear;
+        }
+
+        .shape:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            top: -150px;
+            left: -150px;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 200px;
+            height: 200px;
+            top: 20%;
+            right: -100px;
+            animation-delay: -5s;
+            animation-duration: 25s;
+        }
+
+        .shape:nth-child(3) {
+            width: 150px;
+            height: 150px;
+            bottom: 10%;
+            left: 10%;
+            animation-delay: -10s;
+            animation-duration: 30s;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+            100% { transform: translateY(0) rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+        
+        /* Навигация */
+        .main-nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-button {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: var(--white);
+            padding: 12px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-button:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-2px);
+            border-color: rgba(255,255,255,0.3);
+        }
+
+        .nav-button.active {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            border-color: transparent;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--secondary), transparent);
+            border-radius: 2px;
+        }
+        
+        .main-title {
+            font-size: 4em;
+            margin-bottom: 15px;
+            text-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 800;
+            letter-spacing: 1px;
+        }
+        
+        .subtitle {
+            font-size: 1.4em;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            font-weight: 300;
+        }
+
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 20px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
+            text-align: center;
+            min-width: 150px;
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.15);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--secondary);
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .honor-board, .operators-list {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 35px;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .honor-board:hover, .operators-list:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+        }
+        
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+            font-weight: 600;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 2px;
+        }
+        
+        .top-operators {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        
+        .top-operator {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top-operator::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .top-operator:hover::before {
+            left: 100%;
+        }
+        
+        .top-operator:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateX(8px);
+        }
+        
+        .operator-rank {
+            font-weight: bold;
+            font-size: 1.4em;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border-radius: 50%;
+            color: var(--dark);
+            box-shadow: 0 4px 15px rgba(0,212,170,0.3);
+        }
+
+        .top-operator:nth-child(1) .operator-rank {
+            background: linear-gradient(135deg, gold, #FFD700);
+        }
+
+        .top-operator:nth-child(2) .operator-rank {
+            background: linear-gradient(135deg, silver, #C0C0C0);
+        }
+
+        .top-operator:nth-child(3) .operator-rank {
+            background: linear-gradient(135deg, #CD7F32, #8B4513);
+        }
+        
+        .operator-name {
+            flex-grow: 1;
+            margin-left: 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .operator-points {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            padding: 8px 16px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(0,212,170,0.3);
+        }
+        
+        .operators-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 15px;
+        }
+        
+        .operators-grid::-webkit-scrollbar {
+            width: 10px;
+        }
+        
+        .operators-grid::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.1);
+            border-radius: 5px;
+        }
+        
+        .operators-grid::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border-radius: 5px;
+        }
+        
+        .operator-card {
+            background: rgba(255,255,255,0.05);
+            padding: 25px 15px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .operator-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .operator-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .operator-card:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.3);
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .operator-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--secondary), var(--accent));
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.3em;
+            color: var(--dark);
+            box-shadow: 0 8px 25px rgba(0,212,170,0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .operator-card:hover .operator-avatar {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        .operator-info {
+            margin-top: 10px;
+        }
+
+        .operator-card .operator-name {
+            font-size: 1em;
+            margin: 0;
+            font-weight: 500;
+        }
+        
+        .points-badge {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            color: var(--dark);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-top: 8px;
+            display: inline-block;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(0,212,170,0.3);
+        }
+
+        /* Дополнительные секции */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .feature-card {
+            background: rgba(255,255,255,0.08);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.15);
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.12);
+            border-color: rgba(255,255,255,0.25);
+        }
+
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .feature-description {
+            opacity: 0.8;
+            line-height: 1.5;
+        }
+
+        /* Модальное окно для пароля */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            padding: 40px;
+            border-radius: 25px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5em;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-close:hover {
+            opacity: 1;
+        }
+
+        .modal-title {
+            font-size: 1.8em;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--secondary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .modal-subtitle {
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(0,212,170,0.3);
+        }
+
+        .modal-button {
+            background: linear-gradient(135deg, var(--secondary), var(--primary-light));
+            border: none;
+            color: var(--dark);
+            padding: 15px 30px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,212,170,0.4);
+        }
+
+        .error-message {
+            color: var(--accent);
+            margin-top: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .honor-board, .operators-list, .header, .features-grid {
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .honor-board {
+            animation-delay: 0.2s;
+        }
+
+        .operators-list {
+            animation-delay: 0.4s;
+        }
+
+        .features-grid {
+            animation-delay: 0.6s;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 1024px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-title {
+                font-size: 3em;
+            }
+            
+            .operators-grid {
+                grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+            
+            .main-title {
+                font-size: 2.5em;
+            }
+            
+            .stats-container {
+                gap: 15px;
+            }
+            
+            .stat-item {
+                padding: 15px 20px;
+                min-width: 120px;
+            }
+            
+            .operators-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+            
+            .main-nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .nav-button {
+                width: 100%;
+                max-width: 300px;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированный фон -->
+    <div class="background-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
+
+    <!-- Модальное окно для пароля -->
+    <div class="modal-overlay" id="passwordModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            <h2 class="modal-title">Доступ к обновлению данных</h2>
+            <p class="modal-subtitle">Введите код доступа для продолжения</p>
+            <input type="password" class="password-input" id="passwordInput" placeholder="••••••••" maxlength="8">
+            <div class="error-message" id="passwordError">Неверный код доступа!</div>
+            <button class="modal-button" onclick="checkPassword()">ПОДТВЕРДИТЬ</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Навигация -->
+        <nav class="main-nav">
+            <a href="index.html" class="nav-button active">
+                <i class="fas fa-home"></i>
+                Главная
+            </a>
+            <a href="#" class="nav-button" onclick="openPasswordModal()">
+                <i class="fas fa-edit"></i>
+                Обновить данные
+            </a>
+            <a href="stats.html" class="nav-button">
+                <i class="fas fa-chart-line"></i>
+                Статистика
+            </a>
+            <a href="achievements.html" class="nav-button">
+                <i class="fas fa-trophy"></i>
+                Ачивки
+            </a>
+        </nav>
+
+        <div class="header">
+            <h1 class="main-title">Skypro 1 Line</h1>
+            <p class="subtitle">Доска почета лучших операторов первой линии поддержки</p>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-number" id="totalOperators">31</span>
+                    <span class="stat-label">Операторов</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="totalPoints">32,480</span>
+                    <span class="stat-label">Всего баллов</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number" id="avgPoints">1,048</span>
+                    <span class="stat-label">В среднем</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="honor-board">
+                <h2 class="section-title">
+                    <i class="fas fa-trophy" style="color: gold; margin-right: 10px;"></i>
+                    Топ операторов
+                </h2>
+                <div class="top-operators" id="topOperators">
+                    <!-- Топ операторы будут загружены через JS -->
+                </div>
+            </div>
+            
+            <div class="operators-list">
+                <h2 class="section-title">
+                    <i class="fas fa-users" style="color: var(--secondary); margin-right: 10px;"></i>
+                    Все операторы
+                </h2>
+                <div class="operators-grid" id="operatorsGrid">
+                    <!-- Все операторы будут загружены через JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Дополнительные функции -->
+        <div class="features-grid">
+            <div class="feature-card" onclick="openPasswordModal()">
+                <span class="feature-icon">📊</span>
+                <div class="feature-title">Обновить данные</div>
+                <div class="feature-description">
+                    Быстро внесите показатели за неделю. Простая таблица для ввода назначений, продаж и оценок.
+                </div>
+            </div>
+            
+            <a href="stats.html" class="feature-card">
+                <span class="feature-icon">📈</span>
+                <div class="feature-title">Статистика</div>
+                <div class="feature-description">
+                    Графики прогресса команды, сравнение недель и анализ динамики показателей.
+                </div>
+            </a>
+            
+            <a href="achievements.html" class="feature-card">
+                <span class="feature-icon">🏆</span>
+                <div class="feature-title">Галерея ачивок</div>
+                <div class="feature-description">
+                    Все доступные достижения, категории и условия получения. Вдохновляйтесь новыми целями!
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Пароль для доступа
+        const ACCESS_PASSWORD = "69696969";
+
+        // Функции для модального окна
+        function openPasswordModal() {
+            document.getElementById('passwordModal').style.display = 'flex';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('passwordError').style.display = 'none';
+            document.getElementById('passwordInput').focus();
+        }
+
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+        }
+
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value;
+            const error = document.getElementById('passwordError');
+            
+            if (input === ACCESS_PASSWORD) {
+                window.location.href = 'quick-stats.html';
+            } else {
+                error.style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // Обработка нажатия Enter в поле пароля
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+
+        // Закрытие модального окна при клике на overlay
+        document.getElementById('passwordModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePasswordModal();
+            }
+        });
+
+        // Инициализация данных операторов
+        function initializeOperatorsData() {
+    // Принудительно удаляем старые данные
+    localStorage.removeItem('operators');
+            const existingData = localStorage.getItem('operators');
+            if (existingData) {
+                console.log('Данные уже существуют, пропускаем инициализацию');
+                return;
+            }
+            
+            const operators = [
+                {
+                    id: 1,
+                    name: "Волкова Анастасия",
+                    points: 1250,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true },
+                        { id: 3, name: "Эксперт продукта", description: "Знает все особенности продукта", points: 200, earned: false }
+                    ]
+                },
+                {
+                    id: 2,
+                    name: "Кухтин Владимир",
+                    points: 980,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 5, name: "Ночной охотник", description: "Работает в ночные смены", points: 180, earned: true },
+                        { id: 6, name: "Решение проблем", description: "Решил 500 сложных кейсов", points: 220, earned: true }
+                    ]
+                },
+                {
+                    id: 3,
+                    name: "Кедикайте Анна",
+                    points: 1560,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true },
+                        { id: 3, name: "Эксперт продукта", description: "Знает все особенности продукта", points: 200, earned: true },
+                        { id: 7, name: "Лидер продаж", description: "Провел 200 успешных продаж", points: 300, earned: true }
+                    ]
+                },
+                {
+                    id: 4,
+                    name: "Меркулова Валерия",
+                    points: 720,
+                    achievements: [
+                        { id: 8, name: "Новичок месяца", description: "Лучший показатель среди новичков", points: 120, earned: true },
+                        { id: 9, name: "Терпеливый", description: "Работает с самыми сложными клиентами", points: 160, earned: true }
+                    ]
+                },
+                {
+                    id: 5,
+                    name: "Гриб Ольга",
+                    points: 890,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 10, name: "Организатор", description: "Помогает новым сотрудникам", points: 130, earned: true }
+                    ]
+                },
+                {
+                    id: 6,
+                    name: "Капитанюк Светлана",
+                    points: 1340,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true },
+                        { id: 11, name: "Креативщик", description: "Предложил 50 улучшений процессов", points: 250, earned: true }
+                    ]
+                },
+                {
+                    id: 7,
+                    name: "Непейпиво Михаил",
+                    points: 1100,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 12, name: "Технарь", description: "Освоил все системы компании", points: 170, earned: true }
+                    ]
+                },
+                {
+                    id: 8,
+                    name: "Кунцова Виктория",
+                    points: 950,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 13, name: "Дипломат", description: "Разрешил 100 конфликтных ситуаций", points: 190, earned: true }
+                    ]
+                },
+                {
+                    id: 9,
+                    name: "Телешев Владимир",
+                    points: 680,
+                    achievements: [
+                        { id: 8, name: "Новичок месяца", description: "Лучший показатель среди новичков", points: 120, earned: true }
+                    ]
+                },
+                {
+                    id: 10,
+                    name: "Хатнюк София",
+                    points: 1420,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true },
+                        { id: 3, name: "Эксперт продукта", description: "Знает все особенности продукта", points: 200, earned: true }
+                    ]
+                },
+                {
+                    id: 11,
+                    name: "Дианова Ангелина",
+                    points: 780,
+                    achievements: [
+                        { id: 14, name: "Аккуратный", description: "Ни одной ошибки в документах", points: 140, earned: true }
+                    ]
+                },
+                {
+                    id: 12,
+                    name: "Сафонова Ангелина",
+                    points: 1150,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 15, name: "Мультизадачность", description: "Работает с 3+ проектами", points: 210, earned: true }
+                    ]
+                },
+                {
+                    id: 13,
+                    name: "Евстигнеева Мария",
+                    points: 890,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 14,
+                    name: "Турутов Артём",
+                    points: 1050,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 16, name: "Аналитик", description: "Проанализировал 500+ кейсов", points: 230, earned: true }
+                    ]
+                },
+                {
+                    id: 15,
+                    name: "Чевычелова Виктория",
+                    points: 1220,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true }
+                    ]
+                },
+                {
+                    id: 16,
+                    name: "Гуськова Ирина",
+                    points: 670,
+                    achievements: [
+                        { id: 8, name: "Новичок месяца", description: "Лучший показатель среди новичков", points: 120, earned: true }
+                    ]
+                },
+                {
+                    id: 17,
+                    name: "Аболмасов Никита",
+                    points: 940,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 18,
+                    name: "Шаламов Сергей",
+                    points: 830,
+                    achievements: [
+                        { id: 17, name: "Наставник", description: "Обучил 10 новых сотрудников", points: 270, earned: true }
+                    ]
+                },
+                {
+                    id: 19,
+                    name: "Малышева Дарья",
+                    points: 1010,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 20,
+                    name: "Перепелица Ксения",
+                    points: 760,
+                    achievements: [
+                        { id: 18, name: "Оптимизатор", description: "Улучшил процессы работы", points: 160, earned: true }
+                    ]
+                },
+                {
+                    id: 21,
+                    name: "Куклина Екатерина",
+                    points: 1120,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 19, name: "Командный игрок", description: "Помог 20 коллегам", points: 180, earned: true }
+                    ]
+                },
+                {
+                    id: 22,
+                    name: "Яковлева Агастасия",
+                    points: 690,
+                    achievements: [
+                        { id: 8, name: "Новичок месяца", description: "Лучший показатель среди новичков", points: 120, earned: true }
+                    ]
+                },
+                {
+                    id: 23,
+                    name: "Шобонова Олеся",
+                    points: 870,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 24,
+                    name: "Цикаловский Даниил",
+                    points: 1030,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 20, name: "Исследователь", description: "Изучил все продукты компании", points: 220, earned: true }
+                    ]
+                },
+                {
+                    id: 25,
+                    name: "Вайшнорене Анастасия",
+                    points: 920,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 26,
+                    name: "Ермакова Ирина",
+                    points: 1180,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 2, name: "Скоростник", description: "Среднее время ответа менее 30 секунд", points: 150, earned: true }
+                    ]
+                },
+                {
+                    id: 27,
+                    name: "Филиппова Анна",
+                    points: 810,
+                    achievements: [
+                        { id: 21, name: "Клиентоориентированность", description: "95% положительных отзывов", points: 250, earned: true }
+                    ]
+                },
+                {
+                    id: 28,
+                    name: "Федотова Александра",
+                    points: 990,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                },
+                {
+                    id: 29,
+                    name: "Ломова Дарья",
+                    points: 740,
+                    achievements: [
+                        { id: 8, name: "Новичок месяца", description: "Лучший показатель среди новичков", points: 120, earned: true }
+                    ]
+                },
+                {
+                    id: 30,
+                    name: "Горбачева Тамара",
+                    points: 1090,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true },
+                        { id: 22, name: "Ветеран", description: "Работает более 2 лет", points: 300, earned: true }
+                    ]
+                },
+                {
+                    id: 31,
+                    name: "Грибань София",
+                    points: 850,
+                    achievements: [
+                        { id: 1, name: "Мастер общения", description: "Провел 1000 успешных консультаций", points: 100, earned: true }
+                    ]
+                }
+            ];
+            
+            localStorage.setItem('operators', JSON.stringify(operators));
+            console.log('Данные операторов инициализированы! Загружено:', operators.length, 'операторов');
+        }
+
+        // Загрузка и отображение операторов
+        function loadOperators() {
+            const operators = JSON.parse(localStorage.getItem('operators')) || [];
+            
+            console.log('Загружено операторов:', operators.length);
+            
+            // Обновляем статистику
+            const totalPoints = operators.reduce((sum, op) => sum + op.points, 0);
+            const avgPoints = Math.round(totalPoints / operators.length);
+            
+            document.getElementById('totalPoints').textContent = totalPoints.toLocaleString();
+            document.getElementById('avgPoints').textContent = avgPoints.toLocaleString();
+            document.getElementById('totalOperators').textContent = operators.length;
+            
+            // Сортировка для топа (первые 5)
+            const topOperators = [...operators].sort((a, b) => b.points - a.points).slice(0, 5);
+            
+            // Отображение топа
+            const topOperatorsContainer = document.getElementById('topOperators');
+            topOperatorsContainer.innerHTML = '';
+            
+            topOperators.forEach((operator, index) => {
+                const rankElement = document.createElement('div');
+                rankElement.className = 'top-operator';
+                rankElement.innerHTML = `
+                    <div class="operator-rank">${index + 1}</div>
+                    <div class="operator-name">${operator.name}</div>
+                    <div class="operator-points">${operator.points} баллов</div>
+                `;
+                rankElement.addEventListener('click', () => openOperatorPage(operator.id));
+                topOperatorsContainer.appendChild(rankElement);
+            });
+            
+            // Отображение всех операторов
+            const operatorsGrid = document.getElementById('operatorsGrid');
+            operatorsGrid.innerHTML = '';
+            
+            operators.forEach(operator => {
+                const card = document.createElement('div');
+                card.className = 'operator-card';
+                card.innerHTML = `
+                    <div class="operator-avatar">${operator.name.split(' ').map(n => n[0]).join('')}</div>
+                    <div class="operator-info">
+                        <div class="operator-name">${operator.name}</div>
+                        <div class="points-badge">${operator.points} баллов</div>
+                    </div>
+                `;
+                card.addEventListener('click', () => openOperatorPage(operator.id));
+                operatorsGrid.appendChild(card);
+            });
+        }
+
+        // Переход на страницу оператора
+        function openOperatorPage(operatorId) {
+            window.location.href = `operator.html?id=${operatorId}`;
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeOperatorsData();
+            loadOperators();
+        });
+    </script>
+</body>
+</html>
